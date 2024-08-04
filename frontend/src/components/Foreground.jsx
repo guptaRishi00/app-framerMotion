@@ -1,8 +1,19 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Card from "./Card";
+import AddButton from "./AddButton";
+import PopupForm from "./PopupForm";
 
 function Foreground() {
   const ref = useRef(null);
+  const [popup, setPopup] = useState(false);
+
+  const openPopup = () => {
+    setPopup(true);
+  };
+
+  const closePopup = () => {
+    setPopup(false);
+  };
 
   const data = [
     {
@@ -45,6 +56,8 @@ function Foreground() {
         {data.map((item, index) => (
           <Card data={item} key={index} refrence={ref} />
         ))}
+        <AddButton openPopup={openPopup} />
+        {popup && <PopupForm closePopup={closePopup} />}
       </div>
     </>
   );
