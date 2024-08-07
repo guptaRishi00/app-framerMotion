@@ -14,7 +14,7 @@ function Card({ data, refrence }) {
     >
       <FaRegFileAlt />
       <p className="text-sm mt-5 font-semibold leading-tight">
-        {data.description}
+        {data?.description}
       </p>
       <div className="absolute bottom-0 w-full left-0">
         <div className="flex items-center justify-between  px-8  py-3 mb-3">

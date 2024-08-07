@@ -1,12 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cardsOperations } from "../hooks/useFetch";
+import axios from "axios";
+import { useCardContext } from "../hooks/useCardContext";
 
 function PopupForm({ closePopup }) {
+  const [description, setDescription] = useState("");
+  const [filesize, setFilesize] = useState("");
+  const [close, setClose] = useState(false);
+  const [tagTitle, setTagTitle] = useState("");
+  const [tagColor, setTagColor] = useState("green");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { dispatch } = useCardContext();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const tag = { tagTitle, tagColor, isOpen };
+    const response = await axios.post("http://localhost:3000/card/", {
+      description,
+      filesize,
+      close,
+      tag,
+    });
+    console.log("Response data: ", response.data);
+    dispatch({ type: "ADD_CARD", payload: response.data.card });
+    closePopup();
+  };
+
   return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 2, transition: { duration: 0.5 } }}
+        animate={{ opacity: 1, transition: { duration: 0.5 } }}
         exit={{ opacity: 0, transition: { duration: 2 } }}
         className="absolute z-10 w-full h-screen top-0 left-0 bg-zinc-900/10 backdrop-blur-lg text-white"
       >
@@ -14,10 +40,10 @@ function PopupForm({ closePopup }) {
           onClick={closePopup}
           className="mx-10 my-10 p-2 bg-white text-black rounded"
         >
-          close
+          Close
         </button>
-        <div className="bg-opacity-90 text-white p-6 rounded-lg flex justify-center items-center ">
-          <form>
+        <div className="bg-opacity-90 text-white p-6 rounded-lg flex justify-center items-center">
+          <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label
                 className="block text-white text-sm font-bold mb-2"
@@ -30,6 +56,8 @@ function PopupForm({ closePopup }) {
                 name="description"
                 type="text"
                 className="shadow appearance-none w-96 border-zinc-600 border rounded bg-transparent py-2 px-3 text-white leading-tight focus:border-2 focus:outline-none focus:border-zinc-400"
+                onChange={(e) => setDescription(e.target.value)}
+                value={description}
               />
             </div>
 
@@ -45,6 +73,8 @@ function PopupForm({ closePopup }) {
                 name="filesize"
                 type="text"
                 className="shadow appearance-none w-96 border-zinc-600 border rounded py-2 bg-transparent px-3 text-white leading-tight focus:border-2 focus:outline-none focus:border-zinc-400"
+                onChange={(e) => setFilesize(e.target.value)}
+                value={filesize}
               />
             </div>
 
@@ -60,6 +90,8 @@ function PopupForm({ closePopup }) {
                 name="tagTitle"
                 type="text"
                 className="shadow appearance-none w-96 border-zinc-600 border rounded bg-transparent py-2 px-3 text-white leading-tight focus:border-2 focus:outline-none focus:border-zinc-400"
+                onChange={(e) => setTagTitle(e.target.value)}
+                value={tagTitle}
               />
             </div>
 
@@ -74,6 +106,8 @@ function PopupForm({ closePopup }) {
                 id="tagColor"
                 name="tagColor"
                 className="shadow appearance-none w-96 border-zinc-600 border rounded bg-transparent py-2 px-3 text-slate-200 leading-tight focus:border-2 focus:outline-none focus:border-zinc-400"
+                onChange={(e) => setTagColor(e.target.value)}
+                value={tagColor}
               >
                 <option value="green" className="text-slate-200 bg-zinc-800">
                   Green
@@ -103,6 +137,8 @@ function PopupForm({ closePopup }) {
                   name="isOpen"
                   type="checkbox"
                   className="mr-2 leading-tight"
+                  onChange={(e) => setIsOpen(e.target.checked)}
+                  checked={isOpen}
                 />
                 <span className="text-sm">Open Tag</span>
               </div>
@@ -119,6 +155,8 @@ function PopupForm({ closePopup }) {
                   name="close"
                   type="checkbox"
                   className="mr-2 leading-tight"
+                  onChange={(e) => setClose(e.target.checked)}
+                  checked={close}
                 />
                 <span className="text-sm">Close Button</span>
               </div>
