@@ -21,6 +21,8 @@ export const CardProvider = ({ children }) => {
     card: null,
   });
 
+  console.log("CardContext:", state.card);
+
   return (
     <CardContext.Provider value={{ ...state, dispatch }}>
       {children}

@@ -4,6 +4,7 @@ import AddButton from "./AddButton";
 import PopupForm from "./PopupForm";
 import axios from "axios";
 import { useCardContext } from "../hooks/useCardContext";
+import LogoutButton from "./LogoutButton";
 
 function Foreground() {
   const ref = useRef(null);
@@ -17,7 +18,6 @@ function Foreground() {
       try {
         const response = await axios.get("http://localhost:3000/card/");
         dispatch({ type: "SET_CARD", payload: response.data.card });
-        console.log(response.data.card);
       } catch (error) {
         console.log(error.message);
       }
@@ -45,6 +45,7 @@ function Foreground() {
           ))}
         <AddButton openPopup={openPopup} />
         {popup && <PopupForm closePopup={closePopup} />}
+        <LogoutButton />
       </div>
     </>
   );

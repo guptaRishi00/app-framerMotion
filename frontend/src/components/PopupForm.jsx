@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cardsOperations } from "../hooks/useFetch";
 import axios from "axios";
 import { useCardContext } from "../hooks/useCardContext";
+import { useNavigate } from "react-router-dom";
 
 function PopupForm({ closePopup }) {
   const [description, setDescription] = useState("");
@@ -11,6 +12,8 @@ function PopupForm({ closePopup }) {
   const [tagTitle, setTagTitle] = useState("");
   const [tagColor, setTagColor] = useState("green");
   const [isOpen, setIsOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const { dispatch } = useCardContext();
 
@@ -25,7 +28,7 @@ function PopupForm({ closePopup }) {
     });
     console.log("Response data: ", response.data);
     dispatch({ type: "ADD_CARD", payload: response.data.card });
-    closePopup();
+    navigate("/");
   };
 
   return (
