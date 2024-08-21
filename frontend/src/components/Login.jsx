@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useContext } from "react";
+import { use } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { dispatch } = useContext(AuthContext);
 
@@ -26,12 +26,11 @@ function Login() {
       dispatch({ type: "REGISTER", payload: response.data });
       console.log("User registered successfully:", response.data);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      navigate('/')
-
+      navigate("/");
     } catch (error) {
       if (error.response && error.response.status === 400) {
         console.error("Registration error:", error.response.data.message);
-        alert(`Error: ${error.response.data.message}`); // Inform the user
+        alert(`Error: ${error.response.data.message}`);
       } else {
         console.error("An unexpected error occurred:", error.message);
       }

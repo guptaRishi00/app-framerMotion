@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cardsOperations } from "../hooks/useFetch";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { CardAtom } from "../store/atoms/CardAtom";
 import axios from "axios";
-import { useCardContext } from "../hooks/useCardContext";
-import { useNavigate } from "react-router-dom";
 
 function PopupForm({ closePopup }) {
   const [description, setDescription] = useState("");
@@ -12,10 +11,8 @@ function PopupForm({ closePopup }) {
   const [tagTitle, setTagTitle] = useState("");
   const [tagColor, setTagColor] = useState("green");
   const [isOpen, setIsOpen] = useState(false);
-
-  const navigate = useNavigate();
-
-  const { dispatch } = useCardContext();
+  const setCard = useSetRecoilState(CardAtom);
+  const card = useRecoilValue(CardAtom);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,8 +24,10 @@ function PopupForm({ closePopup }) {
       tag,
     });
     console.log("Response data: ", response.data);
-    dispatch({ type: "ADD_CARD", payload: response.data.card });
-    navigate("/");
+    setCard((oldCard) => [...oldCard, response.data.card]);
+    console.log("Card data:", card);
+
+    closePopup();
   };
 
   return (

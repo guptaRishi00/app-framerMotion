@@ -3,21 +3,23 @@ import Card from "./Card";
 import AddButton from "./AddButton";
 import PopupForm from "./PopupForm";
 import axios from "axios";
-import { useCardContext } from "../hooks/useCardContext";
+import { useRecoilState } from "recoil";
+import { CardAtom } from "../store/atoms/CardAtom";
 import LogoutButton from "./LogoutButton";
 
 function Foreground() {
+  console.log("foreground Componenet");
+
   const ref = useRef(null);
 
   const [popup, setPopup] = useState(false);
-
-  const { card, dispatch } = useCardContext();
+  const [card, setCard] = useRecoilState(CardAtom);
 
   useEffect(() => {
     const fetchCards = async () => {
       try {
         const response = await axios.get("http://localhost:3000/card/");
-        dispatch({ type: "SET_CARD", payload: response.data.card });
+        setCard(response.data.card);
       } catch (error) {
         console.log(error.message);
       }
@@ -41,11 +43,11 @@ function Foreground() {
       >
         {card &&
           card.map((item, index) => (
-            <Card data={item} key={index} refrence={ref} />
+            <Card item={item} key={index} refrence={ref} />
           ))}
         <AddButton openPopup={openPopup} />
         {popup && <PopupForm closePopup={closePopup} />}
-        <LogoutButton />
+        {/* <LogoutButton /> */}
       </div>
     </>
   );
