@@ -23,8 +23,8 @@ function PopupForm({ closePopup }) {
       close,
       tag,
     });
-    console.log("Response data: ", response.data);
-    setCard((oldCard) => [...oldCard, response.data.card]);
+    console.log("Response data: ", response.data.result);
+    setCard((oldCard) => [...oldCard, response.data.result]);
     console.log("Card data:", card);
 
     closePopup();

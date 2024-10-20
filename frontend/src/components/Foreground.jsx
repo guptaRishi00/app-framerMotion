@@ -20,6 +20,7 @@ function Foreground() {
       try {
         const response = await axios.get("http://localhost:3000/card/");
         setCard(response.data.card);
+        console.log("Foreground Component response:", response.data.card);
       } catch (error) {
         console.log(error.message);
       }
